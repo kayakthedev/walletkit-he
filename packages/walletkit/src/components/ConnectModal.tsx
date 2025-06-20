@@ -54,7 +54,7 @@ export default function ConnectModal(props: PropsWithChildren) {
               <button
                 key={provider.name}
                 onClick={() => handleProviderClick(provider.name)}
-                className="text-left p-2 hover:bg-gray-100 cursor-pointer rounded-sm flex justify-between items-center"
+                className="text-left p-2 hover:bg-black cursor-pointer rounded-sm flex justify-between items-center"
               >
                 <div>{provider.name}</div>
                 <div>

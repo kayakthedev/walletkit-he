@@ -1,5 +1,5 @@
 export function unisat() {
-  const unisat = (window as any).unisat;
+  const unisat = window.unisat;
 
   return {
     name: "UniSat Wallet",
@@ -7,21 +7,24 @@ export function unisat() {
     installUrl:
       "https://chromewebstore.google.com/detail/unisat-wallet/ppbibelpcjmhbdihakflkdcoccbgbkpo?hl=en",
     connect: () => {
-      return unisat.requestAccounts().then(console.log);
+      return unisat.requestAccounts();
     },
     disconnect: () => {
-      unisat.disconnect().then(console.log);
+      unisat.disconnect();
     },
-    getAddress: () => {
-      return unisat.requestAccounts().then((accounts: string[]) => accounts[0]);
+    getAddress: async () => {
+      return unisat.getAccounts().then((accounts: string[]) => accounts[0]);
     },
     onAccountChanged: (callback: (address: string) => void) => {
-      return unisat.on("accountsChanged", (accounts: string[]) => {
+      function onAccountChanged(accounts: string[]) {
         callback(accounts[0]);
-      });
+      }
+      unisat.on("accountsChanged", onAccountChanged);
+      return () => unisat.off("accountsChanged", onAccountChanged);
     },
     onWalletConnected: (callback: () => void) => {
-      return unisat.on("walletConnected", callback);
+      unisat.on("walletConnected", callback);
+      return () => unisat.off("walletConnected", callback);
     },
   } as const;
 }

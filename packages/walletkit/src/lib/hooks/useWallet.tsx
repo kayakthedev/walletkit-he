@@ -26,14 +26,21 @@ export function useWallet() {
     if (!selectedProvider) return;
     const provider = getProvider(selectedProvider);
     if (!provider) return;
-    provider.onAccountChanged(() => refetch());
+    const unsubscribe = provider.onAccountChanged((accountAddress) => {
+      if (accountAddress === address) return;
+      refetch();
+    });
+    return () => unsubscribe();
   }, [selectedProvider]);
 
   useEffect(() => {
     if (!selectedProvider) return;
     const provider = getProvider(selectedProvider);
     if (!provider) return;
-    provider.onWalletConnected(() => refetch());
+    const unsubscribe = provider.onWalletConnected(() => {
+      refetch();
+    });
+    return () => unsubscribe();
   }, [selectedProvider]);
 
   const getProvider = (name: string) => {

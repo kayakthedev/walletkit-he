@@ -19,6 +19,7 @@ export function useWalletProvider() {
     useContext(WalletProviderContext);
 
   const setSelectedProvider = (provider?: string) => {
+    if (provider === selectedProvider) return;
     _setSelectedProvider(provider);
     if (provider === undefined) {
       window.localStorage.removeItem("walletkit:selectedProvider");
